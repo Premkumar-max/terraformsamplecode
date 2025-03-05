@@ -1,0 +1,33 @@
+[200~# Terraform Block
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
+# Adding Backend as S3 for Remote State Storage
+  backend "s3" {
+    bucket = "premterraform-s3-bucket"
+    key    = "dev/terraform.tfstate"
+    region = "us-east-1"   
+  }
+}
+# Provider Block
+provider "aws" {
+  region  = "us-east-2"
+  profile = "default"
+}
+
+# Create EC2 Instance
+resource "aws_instance" "my-ec2-vm" {
+  ami               = "ami-0fc82f4dabc05670b"
+  #ami               = "ami-05a00967f06885a63"
+  instance_type     = "t2.micro"
+  availability_zone = "us-east-2a"
+  #availability_zone = "us-east-2b"
+  tags = {
+    "Name" = "Prem"
+    "tag1" = "Update-test-1"
+  }
+}
